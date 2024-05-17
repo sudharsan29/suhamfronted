@@ -1,0 +1,24 @@
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.labelText {
+  font-family: 'Arial', sans-serif; /* Replace with your desired font */
+  font-size: 1.2rem;
+  color: #fff;
+  animation: labelAnimation 1s infinite;
+}
+
+@keyframes labelAnimation {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
