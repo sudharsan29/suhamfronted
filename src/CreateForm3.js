@@ -23,7 +23,8 @@ function CreateForm3() {
         fathersMembership,
         currentlyStudying,
         highestClass,
-        currentWork
+        currentWork,
+        age
     } = location.state;
 
     const [hemoglobin, setHemoglobin] = useState('');
@@ -63,6 +64,7 @@ function CreateForm3() {
             pubertyYear &&
             bmi &&
             bmiReport
+        
         );
     };
 
@@ -93,7 +95,8 @@ function CreateForm3() {
                 Weight: weight,
                 PubertyYear: pubertyYear,
                 bmi: bmi,
-                bmi_report: bmiReport
+                bmi_report: bmiReport,
+                age:age
             });
             console.log(response.data);
             setIsFormSubmitted(true);

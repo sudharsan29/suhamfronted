@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './CreateForm1.css';
+
 function CreateForm1() {
     const location = useLocation();
     const {
@@ -11,12 +12,14 @@ function CreateForm1() {
         selectedVillageId,
         selectedAdolescentGroupId
     } = location.state;
-    const navigate = useNavigate(); // Get the navigate function
+
+    const navigate = useNavigate();
 
     const [groupName, setGroupName] = useState('');
     const [contact, setContact] = useState('');
     const [fullName, setFullName] = useState('');
     const [birthDate, setBirthDate] = useState('');
+    const [age, setAge] = useState(''); // State to store the calculated age
     const [marriageYear, setMarriageYear] = useState('');
     const [mothersName, setMothersName] = useState('');
     const [mothersMembership, setMothersMembership] = useState('');
@@ -33,6 +36,7 @@ function CreateForm1() {
             contact.trim() !== '' &&
             fullName.trim() !== '' &&
             birthDate.trim() !== '' &&
+            age !== '' && // Ensure age is calculated
             marriageYear.trim() !== '' &&
             mothersName.trim() !== '' &&
             mothersMembership.trim() !== '' &&
@@ -43,6 +47,26 @@ function CreateForm1() {
             currentWork.trim() !== ''
         );
     };
+
+    const calculateAge = (birthDate) => {
+        const today = new Date();
+        const birthDateObj = new Date(birthDate);
+        let age = today.getFullYear() - birthDateObj.getFullYear();
+        const monthDifference = today.getMonth() - birthDateObj.getMonth();
+
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDateObj.getDate())) {
+            age--;
+        }
+
+        return age;
+    };
+
+    useEffect(() => {
+        if (birthDate) {
+            const calculatedAge = calculateAge(birthDate);
+            setAge(calculatedAge);
+        }
+    }, [birthDate]);
 
     const inputStyle = {
         width: '100%', // Set a common width for all input fields and select fields
@@ -77,7 +101,7 @@ function CreateForm1() {
         border: 'none',
         backgroundColor: isAllFieldsFilled() ? '#28a745' : '#ccc', // Green if all fields are filled, gray otherwise
         color: '#fff',
-        cursor: 'pointer'
+        cursor: isAllFieldsFilled() ? 'pointer' : 'not-allowed'
     };
 
     const handleNext = () => {
@@ -93,6 +117,7 @@ function CreateForm1() {
                 contact,
                 fullName,
                 birthDate,
+                age,
                 marriageYear,
                 mothersName,
                 mothersMembership,
@@ -110,36 +135,41 @@ function CreateForm1() {
     };
 
     return (
-             <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      padding: '20px',
-      backgroundColor: '#6495ED',
-      height: '160vh', // Set height to 100% of viewport height
-    }}>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: '20px',
+            backgroundColor: '#6495ED',
+            height: '160vh', // Set height to 100% of viewport height
+        }}>
             <div>
-                <label htmlFor="groupName"className="labelText" style={labelStyle}>Group Name:</label>
-                <input type="text" id="groupName" placeholder="GroupName"value={groupName} onChange={(e) => setGroupName(e.target.value)} style={inputStyle} />
+                <label htmlFor="groupName" className="labelText" style={labelStyle}>Group Name:</label>
+                <input type="text" id="groupName" placeholder="GroupName" value={groupName} onChange={(e) => setGroupName(e.target.value)} style={inputStyle} />
             </div>
 
             <div>
                 <label htmlFor="contact" style={labelStyle} className="labelText">Contact:</label>
-                <input type="text" id="contact" value={contact}placeholder="1234567890" onChange={(e) => setContact(e.target.value)} style={inputStyle} />
+                <input type="text" id="contact" value={contact} placeholder="1234567890" onChange={(e) => setContact(e.target.value)} style={inputStyle} />
             </div>
 
             <div>
-                <label htmlFor="fullName" style={labelStyle}className="labelText">Full Name:</label>
+                <label htmlFor="fullName" style={labelStyle} className="labelText">Full Name:</label>
                 <input type="text" id="fullName" value={fullName} placeholder="FullName" onChange={(e) => setFullName(e.target.value)} style={inputStyle} />
             </div>
 
             <div>
-                <label htmlFor="birthDate" style={labelStyle}className="labelText">Birth Date:</label>
+                <label htmlFor="birthDate" style={labelStyle} className="labelText">Birth Date:</label>
                 <input type="date" id="birthDate" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} style={inputStyle} />
             </div>
 
             <div>
-                <label htmlFor="marriageYear" style={labelStyle}className="labelText">Marriage Year</label>
+                <label htmlFor="age" style={labelStyle} className="labelText">Age:</label>
+                <input type="number" id="age" value={age} readOnly style={{ ...inputStyle, backgroundColor: '#f2f2f2' }} />
+            </div>
+
+            <div>
+                <label htmlFor="marriageYear" style={labelStyle} className="labelText">Marriage Year:</label>
                 <select id="marriageYear" value={marriageYear} onChange={(e) => setMarriageYear(e.target.value)} style={inputStyle}>
                     <option value="">Select</option>
                     <option value="Yes">Yes</option>
@@ -148,27 +178,27 @@ function CreateForm1() {
             </div>
 
             <div>
-                <label htmlFor="mothersName" style={labelStyle}className="labelText">Mother's Name:</label>
+                <label htmlFor="mothersName" style={labelStyle} className="labelText">Mother's Name:</label>
                 <input type="text" id="mothersName" value={mothersName} placeholder="MothersName" onChange={(e) => setMothersName(e.target.value)} style={inputStyle} />
             </div>
 
             <div>
-                <label htmlFor="mothersMembership" style={labelStyle}className="labelText">Mother's Membership:</label>
-                <input type="text" id="mothersMembership" placeholder="MothersMembership"value={mothersMembership} onChange={(e) => setMothersMembership(e.target.value)} style={inputStyle} />
+                <label htmlFor="mothersMembership" style={labelStyle} className="labelText">Mother's Membership:</label>
+                <input type="text" id="mothersMembership" placeholder="MothersMembership" value={mothersMembership} onChange={(e) => setMothersMembership(e.target.value)} style={inputStyle} />
             </div>
 
             <div>
-                <label htmlFor="fathersName" style={labelStyle}className="labelText">Father's Name:</label>
-                <input type="text" id="fathersName"placeholder="FathersName" value={fathersName} onChange={(e) => setFathersName(e.target.value)} style={inputStyle} />
+                <label htmlFor="fathersName" style={labelStyle} className="labelText">Father's Name:</label>
+                <input type="text" id="fathersName" placeholder="FathersName" value={fathersName} onChange={(e) => setFathersName(e.target.value)} style={inputStyle} />
             </div>
 
             <div>
-                <label htmlFor="fathersMembership" style={labelStyle}className="labelText">Father's Membership:</label>
-                <input type="text" id="fathersMembership"placeholder="FathersMembership" value={fathersMembership} onChange={(e) => setFathersMembership(e.target.value)} style={inputStyle} />
+                <label htmlFor="fathersMembership" style={labelStyle} className="labelText">Father's Membership:</label>
+                <input type="text" id="fathersMembership" placeholder="FathersMembership" value={fathersMembership} onChange={(e) => setFathersMembership(e.target.value)} style={inputStyle} />
             </div>
 
             <div>
-                <label htmlFor="currentlyStudying" style={labelStyle}className="labelText">Currently Studying:</label>
+                <label htmlFor="currentlyStudying" style={labelStyle} className="labelText">Currently Studying:</label>
                 <select id="currentlyStudying" value={currentlyStudying} onChange={(e) => setCurrentlyStudying(e.target.value)} style={inputStyle}>
                     <option value="">Select</option>
                     <option value="Yes">Yes</option>
@@ -177,13 +207,13 @@ function CreateForm1() {
             </div>
 
             <div>
-                <label htmlFor="highestClass" style={labelStyle}className="labelText">Highest Class:</label>
-                <input type="text" id="highestClass"placeholder="HighestClass" value={highestClass} onChange={(e) => setHighestClass(e.target.value)} style={inputStyle} />
+                <label htmlFor="highestClass" style={labelStyle} className="labelText">Highest Class:</label>
+                <input type="text" id="highestClass" placeholder="HighestClass" value={highestClass} onChange={(e) => setHighestClass(e.target.value)} style={inputStyle} />
             </div>
 
             <div>
-                <label htmlFor="currentWork" style={labelStyle}className="labelText">Current Work:</label>
-                <input type="text" id="currentWork"placeholder="CurrentWork" value={currentWork} onChange={(e) => setCurrentWork(e.target.value)} style={inputStyle} />
+                <label htmlFor="currentWork" style={labelStyle} className="labelText">Current Work:</label>
+                <input type="text" id="currentWork" placeholder="CurrentWork" value={currentWork} onChange={(e) => setCurrentWork(e.target.value)} style={inputStyle} />
             </div>
 
             <button onClick={handleBack} style={{ ...buttonStyle, backgroundColor: '#28a745' }}>Back</button>
@@ -195,4 +225,3 @@ function CreateForm1() {
 }
 
 export default CreateForm1;
-
