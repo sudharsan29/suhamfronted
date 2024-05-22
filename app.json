@@ -4,7 +4,7 @@
     "slug": "suham",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/heartbeat.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -16,12 +16,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/heartbeat.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.sudharsan2910.suham"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/heartbeat.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d63abd79-30ff-4454-9231-580ac8746c76"
+      }
     }
   }
 }
